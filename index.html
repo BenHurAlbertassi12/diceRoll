@@ -18,28 +18,58 @@
     <label for="lados">Número de Lados:</label>
     <input type="number" id="lados" name="lados" min="2" value="6" required><br><br>
 
+    <label for="somatorio">Quantidade a Somar:</label>
+    <input type="number" id="quantidadeSomar" name="quantidadeSomar" min="0" value="0"><br><br>
+
     <button type="submit">Jogar</button>
   </form>
 
   <div id="resultado"></div>
+  <div id="historico"></div>
 
   <script>
+    let historicoResultados = {};
+
     document.getElementById('dadosForm').addEventListener('submit', function(event) {
       event.preventDefault();
       
       const nome = document.getElementById('nome').value;
       const quantidade = parseInt(document.getElementById('quantidade').value);
       const lados = parseInt(document.getElementById('lados').value);
+      const quantidadeSomar = parseInt(document.getElementById('quantidadeSomar').value);
+      let total = 0;
       
       let resultadoHTML = `<p>${nome} jogou ${quantidade} dado(s) de ${lados} lado(s) e obteve:</p>`;
       
       for (let i = 0; i < quantidade; i++) {
         const resultadoDado = Math.floor(Math.random() * lados) + 1;
-        resultadoHTML += `<p>Resultado do dado ${i + 1}: ${resultadoDado}</p>`;
+        const resultadoFinal = resultadoDado + quantidadeSomar;
+        resultadoHTML += `<p>Resultado do dado ${i + 1}: ${resultadoDado} + ${quantidadeSomar} = ${resultadoFinal}</p>`;
+        total += resultadoFinal;
+        if (!historicoResultados[nome]) {
+          historicoResultados[nome] = [];
+        }
+        historicoResultados[nome].push(resultadoFinal);
       }
       
+      resultadoHTML += `<p>Somatório total: ${total}</p>`;
+      
       document.getElementById('resultado').innerHTML = resultadoHTML;
+      atualizarHistorico();
     });
+
+    function atualizarHistorico() {
+      let historicoHTML = '<h2>Histórico de Resultados:</h2>';
+      for (const nome in historicoResultados) {
+        historicoHTML += `<h3>${nome}:</h3>`;
+        historicoHTML += '<ul>';
+        historicoResultados[nome].forEach((resultado, index) => {
+          historicoHTML += `<li>Resultado ${index + 1}: ${resultado}</li>`;
+        });
+        historicoHTML += '</ul>';
+      }
+      document.getElementById('historico').innerHTML = historicoHTML;
+    }
   </script>
 </body>
 </html>
