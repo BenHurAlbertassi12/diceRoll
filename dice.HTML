@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jogar Dados</title>
+</head>
+<body>
+  <h1>Jogar Dados</h1>
+  
+  <form id="dadosForm">
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" name="nome" required><br><br>
+
+    <label for="quantidade">Quantidade de Dados:</label>
+    <input type="number" id="quantidade" name="quantidade" min="1" value="1" required><br><br>
+
+    <label for="lados">Número de Lados:</label>
+    <input type="number" id="lados" name="lados" min="2" value="6" required><br><br>
+
+    <button type="submit">Jogar</button>
+  </form>
+
+  <div id="resultado"></div>
+
+  <script>
+    document.getElementById('dadosForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      const nome = document.getElementById('nome').value;
+      const quantidade = parseInt(document.getElementById('quantidade').value);
+      const lados = parseInt(document.getElementById('lados').value);
+      
+      let resultadoHTML = `<p>${nome} jogou ${quantidade} dado(s) de ${lados} lado(s) e obteve:</p>`;
+      
+      for (let i = 0; i < quantidade; i++) {
+        const resultadoDado = Math.floor(Math.random() * lados) + 1;
+        resultadoHTML += `<p>Resultado do dado ${i + 1}: ${resultadoDado}</p>`;
+      }
+      
+      document.getElementById('resultado').innerHTML = resultadoHTML;
+    });
+  </script>
+</body>
+</html>
